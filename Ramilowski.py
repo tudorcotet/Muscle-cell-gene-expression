@@ -4,7 +4,6 @@ import urllib.request
 from bs4 import BeautifulSoup
 
 
-
 URL = "https://fantom.gsc.riken.jp/5/suppl/Ramilowski_et_al_2015/data"
 GEN_PATH = Path.cwd()
 DATA_PATH = Path(GEN_PATH / "data")
@@ -42,6 +41,7 @@ def download_ramilowski(url: str, file_name: str or None = None) -> None:
             raise ValueError(file_name + " already downloaded")
         else:
             urllib.request.urlretrieve(url + "/" + file_name, DATA_PATH / filename)
+
 
 
 if __name__ == "__main__":
