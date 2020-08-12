@@ -4,7 +4,7 @@ import pandas as pd
 #Plotting
 import matplotlib.pyplot as plt
 import seaborn as sns
-%matplotlib inline
+# %matplotlib inline
 
 #General sklrean preprocessing
 from sklearn.pipeline import Pipeline
@@ -94,7 +94,7 @@ def plot_dendrogram(data, metric_pdist: str = "euclidean", metric_linkage: str =
 cluster = AgglomerativeClustering(n_clusters = None, distance_threshold = 0)
 model = cluster.fit(data)
 df["Labels"] = model.labels_
-len(model.labels_)
+# len(model.labels_)
 
 fig = plt.figure(figsize=(25, 10))
 plt.title('Hierarchical clustering dendrogram')

@@ -10,7 +10,7 @@ download_ramilowski(URL)
 DATA_PATH = Path.cwd() / "data"
 
 expression_df = pd.read_csv(Path(DATA_PATH / "ExpressionGenes.txt"), header = 0, sep = "\t")
-expression_df.dtypes
+# expression_df.dtypes
 
 
 muscle_genes = (pd.read_csv(DATA_PATH / "Muscle differentiation genes.csv", header = 0, sep = ",")
@@ -26,15 +26,20 @@ df = (pd.DataFrame(expression_df[expression_df["ApprovedSymbol"].isin(muscle_gen
 
 df.columns = df.iloc[0,0:]
 df = df.drop(0)
-df.rename(columns = {"ApprovedSymbol":"Cell type"}, inplace = True)
-df["Muscle cells"] = np.where(df['Cell type'].str.contains("Muscle") , "Yes", np.where(~df["Cell type"].str.contains("Muscle"), "No", "Error"))
+df.rename(columns = {"ApprovedSymbol": "Cell type"}, inplace = True)
+
+# Note that the statement below misses some muscle celltypes
+# Also it can probably be rewritten as: 
+df['Muscle cells'] = np.where(df['Cell type'].str.contains('Muscle'), 'Yes', 'No')
+# df["Muscle cells"] = np.where(df['Cell type'].str.contains("Muscle") , "Yes", np.where(~df["Cell type"].str.contains("Muscle"), "No", 'Error')
+
 df = df.set_index("Cell type")
 df[df.columns.difference(["Muscle cells"])] = df[df.columns.difference(["Muscle cells"])].astype("float")
 df["Muscle cells"] = df["Muscle cells"].astype("category")
 #df.assign(Muscle cell = "")
 #df.loc[df["Cell type"].str.contains("Muscle"), "Muscle cells"] = "Yes"
 #df.loc[~df["Cell type"].str.contains("Muscle"), "Muscle cells"] = "No"
-df.to_csv(Path(Path.cwd() / "data" / "WrangledDf.csv"), index = True)
+df.to_csv(Path(Path.cwd() / "data" / "WrangledDf.csv"), index = True)  # this statement could be announced in in a log
 
 
 mean_table = df.groupby("Muscle cells", as_index = False).mean().melt(id_vars = "Muscle cells")
@@ -50,7 +55,7 @@ mean_table_wrangled
 
 import matplotlib.pyplot as plt
 import seaborn as sns
-%matplotlib inline
+# %matplotlib inline  # raises error when running as python script
 
 
 fig = plt.figure(figsize=(15, 8))
@@ -61,3 +66,5 @@ muscle_df = df[df["Muscle cells"] == "Yes"]
 sns.kdeplot(muscle_df["MYOG"], bw = 0.1)
 cells_df = df[df["Muscle cells"] == "No"]
 sns.kdeplot(cells_df["MYOG"], bw = 0.1)
+
+
